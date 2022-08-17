@@ -1,7 +1,10 @@
+require("dotenv").config();
+
 const mongoose=require("mongoose");
 const bcrypt=require("bcryptjs");
+const {sign}=require("jsonwebtoken");
 
-const userSchema=new mongoose.Schema({
+const UserSchema=new mongoose.Schema({
     name:{
         type:String,
         required:[true,"Name cannot be left empty"],
@@ -15,15 +18,17 @@ const userSchema=new mongoose.Schema({
     password:{
         type:String,
         required:[true,"Password cannot be left empty"]
-         
     }
 })
 
-userSchema.pre('save',async function(next){
+UserSchema.methods.generateToken=function (){
+    return sign({name:this.name, email:this.email},process.env.JWT_SECRET,{expiresIn:process.env.JWT_LIFELINE});
+}
+
+UserSchema.pre('save',async function(next){
     const salt=await bcrypt.genSalt(10);
     this.password=await bcrypt.hash(this.password,salt);
-    next();
 })
 
 
-module.exports=mongoose.model("User-Model",userSchema);
+module.exports=mongoose.model("User-Model",UserSchema);
