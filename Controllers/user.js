@@ -1,4 +1,6 @@
 const {StatusCodes}=require("http-status-codes");
+const BadRequestError=require("../Error_Handlers/badRequestError");
+const UnauthenticatedEror=require("../Error_Handlers/authenticationError");
 
 const userModel=require("../Models/user");
 
@@ -9,6 +11,13 @@ const register=async (req,res)=>{
 }
 
 const login=async(req,res)=>{
-    console.log("Login User");
+    const {email,password}=req.body;
+    if(!email || !password) throw new BadRequestError("Email or password is not provided");
+
+    const user=await userModel.findOne({email:email});
+    if(!user) throw new UnauthenticatedEror("The email you are providing doesnot exist"); 
+
+    const token=user.generateToken();
+    res.status(StatusCodes.OK).json({message:"Login sucesfull",token:token});
 }
 module.exports={register,login};
