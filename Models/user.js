@@ -25,6 +25,11 @@ UserSchema.methods.generateToken=function (){
     return sign({name:this.name, email:this.email},process.env.JWT_SECRET,{expiresIn:process.env.JWT_LIFELINE});
 }
 
+UserSchema.methods.verifyPassword=async function (candidatePassword){
+    const match=await bcrypt.compare(candidatePassword,this.password);
+    return match;
+}
+
 UserSchema.pre('save',async function(next){
     const salt=await bcrypt.genSalt(10);
     this.password=await bcrypt.hash(this.password,salt);

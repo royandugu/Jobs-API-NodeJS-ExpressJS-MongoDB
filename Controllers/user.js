@@ -16,8 +16,12 @@ const login=async(req,res)=>{
 
     const user=await userModel.findOne({email:email});
     if(!user) throw new UnauthenticatedEror("The email you are providing doesnot exist"); 
-
-    const token=user.generateToken();
-    res.status(StatusCodes.OK).json({message:"Login sucesfull",token:token});
+    
+    const passwordMatches=await user.verifyPassword(password);
+    if(passwordMatches){
+        const token=user.generateToken();
+        res.status(StatusCodes.OK).json({message:"Login sucesfull",token:token});
+    }
+    else throw new UnauthenticatedEror("The password doesn't match");
 }
 module.exports={register,login};
