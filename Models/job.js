@@ -1,6 +1,6 @@
 const mongoose=require("mongoose");
 
-const jobShema=new mongoose.Schema({
+const jobSchema=new mongoose.Schema({
     title:{
         type:String,
         trim:true,
@@ -23,8 +23,8 @@ const jobShema=new mongoose.Schema({
     },
     createdBy:{
         type:mongoose.Types.ObjectId,
-        ref:"User-Model",
-        required:[true,"A job must have a user created"]
+        ref:"User-Model"
     }
-    
+      
 })
+module.exports=mongoose.model("Job-Model",jobSchema);
