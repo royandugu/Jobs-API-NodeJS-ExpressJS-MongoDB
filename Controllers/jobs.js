@@ -17,6 +17,7 @@ const getSpecificJob=async (req,res)=>{
     res.status(StatusCodes.OK).json({selectedJob:selectedJob});
 }
 const createJob=async (req,res)=>{
+    req.body.createdBy=req.user.userID;
     const createdJob=await jobModel.create({...req.body});
     res.status(StatusCodes.CREATED).json({createdJob:createdJob});
 }

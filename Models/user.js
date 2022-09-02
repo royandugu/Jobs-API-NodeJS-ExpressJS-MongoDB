@@ -22,7 +22,7 @@ const UserSchema=new mongoose.Schema({
 })
 
 UserSchema.methods.generateToken=function (){
-    return sign({name:this.name, email:this.email},process.env.JWT_SECRET,{expiresIn:process.env.JWT_LIFELINE});
+    return sign({userId:this._id,name:this.name, email:this.email},process.env.JWT_SECRET,{expiresIn:process.env.JWT_LIFELINE});
 }
 
 UserSchema.methods.verifyPassword=async function (candidatePassword){

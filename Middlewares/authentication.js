@@ -8,8 +8,8 @@ const authenticateToken=async (req,res,next)=>{
     if(!authHeader || !authHeader.startsWith("Bearer ")) throw new AuthenticationError("Invalid token pattern");
     const token=authHeader.split(" ")[1];
     try{
-        const payLoad=await jwt.verify(token,process.env.JWT_SECRET);    
-        req.user={name:payLoad.name};
+        const payload=await jwt.verify(token,process.env.JWT_SECRET);    
+        req.user = { userId: payload.userId, name: payload.name };
         next();
     }
     catch(err){
