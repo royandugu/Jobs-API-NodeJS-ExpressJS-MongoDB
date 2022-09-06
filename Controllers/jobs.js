@@ -7,7 +7,7 @@ const throwError=()=>{
     throw new BadRequestError("The provided item doesn't exist");
 }
 const getAllJobs=async (req,res)=>{
-    const allJobs=await jobModel.find({});
+    const allJobs=await jobModel.findOne({createdBy:req.user.userId}).sort("createdAt");
     res.status(StatusCodes.OK).json({allJobs:allJobs});
 }
 const getSpecificJob=async (req,res)=>{   
@@ -17,7 +17,7 @@ const getSpecificJob=async (req,res)=>{
     res.status(StatusCodes.OK).json({selectedJob:selectedJob});
 }
 const createJob=async (req,res)=>{
-    req.body.createdBy=req.user.userID;
+    req.body.createdBy=req.user.userId;
     const createdJob=await jobModel.create({...req.body});
     res.status(StatusCodes.CREATED).json({createdJob:createdJob});
 }
