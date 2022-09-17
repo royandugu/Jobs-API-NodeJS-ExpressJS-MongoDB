@@ -3,18 +3,15 @@ const BadRequestError=require("../Error_Handlers/badRequestError");
 
 const jobModel=require("../Models/job");
 
-const throwError=()=>{
-    throw new BadRequestError("The provided item doesn't exist");
-}
 const getAllJobs=async (req,res)=>{
-    const allJobs=await jobModel.findOne({createdBy:req.user.userId}).sort("createdAt");
+    const allJobs=await jobModel.find({createdBy:req.user.userId}).sort("createdAt");
     res.status(StatusCodes.OK).json({allJobs:allJobs});
 }
 const getSpecificJob=async (req,res)=>{   
-    const {id:taskID}=req.params;
-    const selectedJob=await jobModel.findOne({_id:taskID});
-    if(!selectedJob) throwError();
-    res.status(StatusCodes.OK).json({selectedJob:selectedJob});
+    const {user:{userId},params:{id:jobId}}=req;
+    const selectedJob=await jobModel.findOne({_id:jobId,createdBy:userId});
+    if(!selectedJob) throw new BadRequestError("The job doesn't exist");
+    res.status(StatusCodes.OK).json({specificJob:selectedJob});
 }
 const createJob=async (req,res)=>{
     req.body.createdBy=req.user.userId;
@@ -22,16 +19,16 @@ const createJob=async (req,res)=>{
     res.status(StatusCodes.CREATED).json({createdJob:createdJob});
 }
 const deleteJob=async (req,res)=>{
-    const {id:taskID}=req.params;
-    const deletedJob=await jobModel.findOneAndDelete({_id:taskID});
-    if(!deletedJob) throwError();
-    res.status(StatusCodes.OK).json({deletedJob:deletedJob});
+    const {user:{userId},params:{id:jobId}}=req;
+    const toBeDeleted=await jobModel.findOneAndDelete({_id:jobId,createdBy:userId});
+    if(!toBeDeleted) throw new BadRequestError("The job you want to delete doesn't exist");
+    res.status(StatusCodes.OK).json({deletedJob:toBeDeleted});
 }
 const updateJob=async (req,res)=>{
-    const {id:taskID}=req.params;
-    const updatedJob=await jobModel.findOneAndUpdate({_id:taskID},{...req.body},{new:true,runValidators:true});
-    if(!updatedJob) throwError();
-    res.status(StatusCodes.OK).json({updatedJob:updatedJob});
+    const {user:{userId},params:{id:jobId},body}=req;
+    const toBeUpdated=await jobModel.findOneAndUpdate({_id:jobId,createdBy:userId},{...body},{new:true,runValidators:true});
+    if(!toBeUpdated) throw new BadRequestError("The job you are trying to update doesn't exist");
+    res.status(StatusCodes.OK).json({updatedJob:toBeUpdated});
 }
 
 

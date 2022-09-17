@@ -14,6 +14,8 @@ Job search management API using NodeJS, ExpressJS and MongoDB
    -> Checks if the token has been provided while trying to access the routes and if it follows a proper format        ("Bearer token")<br>
    -> If the token is of a proper format then it further checks if the token matches with the one stored in the local memory <br>
 
+## Features updated <br>
+Whenever a user creates a job, his/her id is saved as createdBy attribute on that specific job. Now whenever any type of RUD request is provided by the user, first it is validates if the createdBy equals the id of the user that is trying to perform the operation. If only the condition is true, then the user can access, update or delete the task. In short, a user can only work with the tasks created by themsleves. <br>
 
 
 *--Learning and implementing from John Smilga--*   
