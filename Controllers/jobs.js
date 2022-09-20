@@ -25,7 +25,8 @@ const deleteJob=async (req,res)=>{
     res.status(StatusCodes.OK).json({deletedJob:toBeDeleted});
 }
 const updateJob=async (req,res)=>{
-    const {user:{userId},params:{id:jobId},body}=req;
+    const {user:{userId},params:{id:jobId},body:{company,position}}=req;
+    if(company===" " || position===" ") throw new BadRequestError("Company or position cannot be left empty");
     const toBeUpdated=await jobModel.findOneAndUpdate({_id:jobId,createdBy:userId},{...body},{new:true,runValidators:true});
     if(!toBeUpdated) throw new BadRequestError("The job you are trying to update doesn't exist");
     res.status(StatusCodes.OK).json({updatedJob:toBeUpdated});

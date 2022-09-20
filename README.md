@@ -16,6 +16,11 @@ Job search management API using NodeJS, ExpressJS and MongoDB
 
 ## Features updated <br>
 Whenever a user creates a job, his/her id is saved as createdBy attribute on that specific job. Now whenever any type of RUD request is provided by the user, first it is validates if the createdBy equals the id of the user that is trying to perform the operation. If only the condition is true, then the user can access, update or delete the task. In short, a user can only work with the tasks created by themsleves. <br>
+<br>
 
+## Error handling <br>
+For every mongoose error the API just responds with a generic error of Internal Server Error whereas things like email duplication is termed as a Bad Request. Therefore properly returning error for the trial of registering with an unavaliable email address using the err object and it's code for error duplication.
+
+<br>
 
 *--Learning and implementing from John Smilga--*   
