@@ -23,4 +23,10 @@ For every mongoose error the API just responds with a generic error of Internal 
 
 <br>
 
+## Security packages <br>
+1. Helmet : To set up certain HTTP headers to protect our API
+2. CORS : Remote API distribution
+3. XSS-Clean : Clean the user requests to prevent anykind of suspicious injections through requests
+4. Express-rate-limit: To limit the amount the requests to the API. Here it is set to 100 requests in 15 minutes (from the docs.)
+
 *--Learning and implementing from John Smilga--*   
