@@ -5,7 +5,11 @@ const jobModel=require("../Models/job");
 
 const getAllJobs=async (req,res)=>{
     const allJobs=await jobModel.find({createdBy:req.user.userId}).sort("createdAt");
-    res.status(StatusCodes.OK).json({allJobs:allJobs});
+    res.status(StatusCodes.OK).json({yourJobs:allJobs});
+}
+const getAllStaticJobs=async (req,res)=> {
+    const allJobs=await jobModel.find();
+    res.status(StatusCodes.OK).json({staticJobs:allJobs});
 }
 const getSpecificJob=async (req,res)=>{   
     const {user:{userId},params:{id:jobId}}=req;
@@ -33,4 +37,4 @@ const updateJob=async (req,res)=>{
 }
 
 
-module.exports={getAllJobs,getSpecificJob,createJob,deleteJob,updateJob};
+module.exports={getAllJobs,getSpecificJob,createJob,deleteJob,updateJob,getAllStaticJobs};
