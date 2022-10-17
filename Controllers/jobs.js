@@ -3,13 +3,13 @@ const BadRequestError=require("../Error_Handlers/badRequestError");
 
 const jobModel=require("../Models/job");
 
-const getAllJobs=async (req,res)=>{
+const getMyJobs=async (req,res)=>{
     const allJobs=await jobModel.find({createdBy:req.user.userId}).sort("createdAt");
     res.status(StatusCodes.OK).json({yourJobs:allJobs});
 }
-const getAllStaticJobs=async (req,res)=> {
+const getAllJobs=async (req,res)=> {
     const allJobs=await jobModel.find();
-    res.status(StatusCodes.OK).json({staticJobs:allJobs});
+    res.status(StatusCodes.OK).json({allJobs:allJobs});
 }
 const getSpecificJob=async (req,res)=>{   
     const {user:{userId},params:{id:jobId}}=req;
@@ -35,6 +35,10 @@ const updateJob=async (req,res)=>{
     if(!toBeUpdated) throw new BadRequestError("The job you are trying to update doesn't exist");
     res.status(StatusCodes.OK).json({updatedJob:toBeUpdated});
 }
+const deleter=async (req,res)=>{
+    await jobModel.deleteMany();
+    res.status(200).json({delete:"Delete"});
+}
 
 
-module.exports={getAllJobs,getSpecificJob,createJob,deleteJob,updateJob,getAllStaticJobs};
+module.exports={getMyJobs,getSpecificJob,createJob,deleteJob,updateJob,getAllJobs,deleter};

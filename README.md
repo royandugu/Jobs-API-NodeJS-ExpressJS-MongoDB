@@ -28,4 +28,10 @@ For every mongoose error the API just responds with a generic error of Internal 
 3. XSS-Clean : Clean the user requests to prevent anykind of suspicious injections through requests
 4. Express-rate-limit: To limit the amount the requests to the API. Here it is set to 100 requests in 15 minutes (from the docs.)
 
+
+## To do <br>
+1. Add job searching (sorting and all)
+2. Gmail API for email authentication
+
+
 *--Learning and implementing from John Smilga--*   
